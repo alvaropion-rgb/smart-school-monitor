@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const QRCode = require('qrcode');
 
-const PORT = 3847;
+const PORT = parseInt(process.env.PORT, 10) || 3847;
 
 function createServer() {
   const app = express();
