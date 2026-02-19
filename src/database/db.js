@@ -15,7 +15,8 @@ function getDb() {
   const dbPath = getDbPath();
   fs.mkdirSync(path.dirname(dbPath), { recursive: true });
   db = new Database(dbPath);
-  db.pragma('journal_mode = WAL');
+  // Use DELETE journal on cloud (ephemeral FS) to avoid WAL corruption; WAL locally for speed
+  db.pragma(process.env.DATA_DIR ? 'journal_mode = DELETE' : 'journal_mode = WAL');
   db.pragma('foreign_keys = ON');
   return db;
 }
