@@ -1,5 +1,4 @@
 node_modules/
-data/database.sqlite
 data/blueprints/
 data/tessdata/
 .DS_Store
