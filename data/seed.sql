@@ -28948,7 +28948,7 @@ CREATE TABLE email_config (
     );
 INSERT INTO email_config VALUES('companyEmail','','2026-02-19T18:10:32.479Z');
 INSERT INTO email_config VALUES('emailSubject','Printer Issue Report','2026-02-19T18:10:32.484Z');
-INSERT INTO email_config VALUES('emailTemplate',unistr('Dear Support Team,\u000a\u000aWe are experiencing issues with the following printer:\u000a\u000a{PRINTER_INFO}\u000a\u000aPlease assist.\u000a\u000aThank you.'),'2026-02-19T18:10:32.484Z');
+INSERT INTO email_config VALUES('emailTemplate','Dear Support Team,'||char(10)||''||char(10)||'We are experiencing issues with the following printer:'||char(10)||''||char(10)||'{PRINTER_INFO}'||char(10)||''||char(10)||'Please assist.'||char(10)||''||char(10)||'Thank you.','2026-02-19T18:10:32.484Z');
 INSERT INTO email_config VALUES('appTitle','Smart School Monitor','2026-02-19T18:10:32.484Z');
 INSERT INTO email_config VALUES('appSubtitle','SNMP Network Monitoring System','2026-02-19T18:10:32.484Z');
 INSERT INTO email_config VALUES('snmpGatewayUrl','http://localhost:5017','2026-02-19T18:10:32.484Z');
