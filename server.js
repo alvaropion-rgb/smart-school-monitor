@@ -310,8 +310,12 @@ async function main() {
     // 2. Start Express API server (includes IPC bridge + SSE)
     await startExpressServer();
 
-    // 3. Start SNMP gateway
-    startGateway();
+    // 3. Start SNMP gateway (skip on cloud — opens UDP ports that confuse Render's port detection)
+    if (!process.env.RENDER) {
+      startGateway();
+    } else {
+      console.log('Running on Render — skipping SNMP gateway (not needed in cloud)');
+    }
 
     // 4. Start email queue processor
     startEmailQueueProcessor();
