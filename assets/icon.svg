@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="shark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="60%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="fin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="1024" height="1024" rx="220" ry="220" fill="url(#bg)"/>
+  <!-- Subtle inner glow -->
+  <rect x="40" y="40" width="944" height="944" rx="190" ry="190" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+
+  <!-- Shark body -->
+  <g transform="translate(512, 480)">
+    <!-- Main body -->
+    <ellipse cx="0" cy="30" rx="280" ry="120" fill="url(#shark)"/>
+    <!-- Belly (lighter) -->
+    <ellipse cx="0" cy="70" rx="240" ry="70" fill="#f1f5f9"/>
+
+    <!-- Dorsal fin (top) -->
+    <path d="M -30,-90 L 10,-200 L 60,-60 Z" fill="url(#fin)" stroke="#475569" stroke-width="3"/>
+
+    <!-- Tail fin -->
+    <path d="M 240,0 L 340,-70 L 300,10 L 350,80 L 240,40 Z" fill="url(#fin)" stroke="#475569" stroke-width="2"/>
+
+    <!-- Pectoral fin (bottom) -->
+    <path d="M -60,80 L -140,170 L -20,120 Z" fill="url(#fin)" stroke="#475569" stroke-width="2"/>
+
+    <!-- Head/nose -->
+    <path d="M -280,30 Q -340,30 -330,-10 Q -310,-30 -280,-20 Z" fill="#94a3b8"/>
+
+    <!-- Eye -->
+    <circle cx="-200" cy="-10" r="22" fill="#1e293b"/>
+    <circle cx="-194" cy="-16" r="8" fill="#ffffff"/>
+
+    <!-- Mouth line -->
+    <path d="M -280,40 Q -220,60 -140,50" fill="none" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Gill lines -->
+    <line x1="-120" y1="-20" x2="-110" y2="40" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-100" y1="-25" x2="-90" y2="35" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-80" y1="-28" x2="-70" y2="32" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- WiFi/signal waves (representing monitoring) -->
+  <g transform="translate(680, 260)" stroke="#60a5fa" fill="none" stroke-width="10" stroke-linecap="round">
+    <path d="M 0,40 Q 0,20 15,10" opacity="0.5"/>
+    <path d="M 0,40 Q 0,5 30,-10" opacity="0.7"/>
+    <path d="M 0,40 Q 0,-10 45,-30" opacity="0.9"/>
+  </g>
+
+  <!-- Small printer icon (bottom right) -->
+  <g transform="translate(720, 650)">
+    <rect x="0" y="15" width="80" height="50" rx="6" fill="#f8fafc" stroke="#93c5fd" stroke-width="3"/>
+    <rect x="10" y="0" width="60" height="20" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+    <rect x="15" y="45" width="50" height="25" rx="3" fill="#dbeafe"/>
+    <circle cx="65" cy="35" r="5" fill="#22c55e"/>
+  </g>
+
+  <!-- Text: SSM -->
+  <text x="512" y="830" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="140" fill="#ffffff" letter-spacing="8">SharkQuick</text>
+  <text x="512" y="880" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="60" fill="#93c5fd" letter-spacing="4">MONITOR</text>
+</svg>

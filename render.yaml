@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: smart-school-monitor
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: NODE_ENV
+        value: production
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
