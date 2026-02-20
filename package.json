@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Smart School Monitor - Web App",
   "main": "server.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "start:electron": "electron main.js",

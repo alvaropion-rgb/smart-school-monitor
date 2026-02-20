@@ -2,15 +2,16 @@ services:
   - type: web
     name: smart-school-monitor
     runtime: node
-    plan: starter
-    buildCommand: npm install
+    plan: free
+    region: oregon
+    branch: master
+    buildCommand: npm install --omit=dev && node scripts/seed-db.js
     startCommand: node server.js
+    healthCheckPath: /api/ping
     envVars:
+      - key: RENDER
+        value: "true"
       - key: DATA_DIR
-        value: /data
+        value: /opt/render/project/src/data
       - key: NODE_ENV
         value: production
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
