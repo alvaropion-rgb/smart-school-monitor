@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "postinstall": "node scripts/seed-db.js",
     "start:electron": "electron main.js",
     "rebuild": "electron-rebuild -f -w better-sqlite3"
   },

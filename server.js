@@ -310,11 +310,12 @@ async function main() {
     // 2. Start Express API server (includes IPC bridge + SSE)
     await startExpressServer();
 
-    // 3. Start SNMP gateway (skip on cloud — opens UDP ports that confuse Render's port detection)
-    if (!process.env.RENDER) {
+    // 3. Start SNMP gateway (skip on cloud — opens UDP ports that confuse port detection)
+    const isCloud = process.env.RENDER || process.env.RAILWAY_ENVIRONMENT || process.env.FLY_APP_NAME;
+    if (!isCloud) {
       startGateway();
     } else {
-      console.log('Running on Render — skipping SNMP gateway (not needed in cloud)');
+      console.log('Running on cloud platform — skipping SNMP gateway');
     }
 
     // 4. Start email queue processor
