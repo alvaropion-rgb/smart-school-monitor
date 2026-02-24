@@ -15,6 +15,4 @@ COPY . .
 # Create data and uploads directories
 RUN mkdir -p /data uploads/blueprints
 
-EXPOSE 3000
-
 CMD ["node", "server.js"]
