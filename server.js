@@ -56,7 +56,6 @@ app.get('*', (req, res) => {
 // Initialize database on startup
 require('./db/database');
 
-const host = process.env.RAILWAY_ENVIRONMENT ? undefined : '0.0.0.0';
-app.listen(config.PORT, host, () => {
+app.listen(config.PORT, () => {
   console.log(`Smart School Monitor running on port ${config.PORT}`);
 });
