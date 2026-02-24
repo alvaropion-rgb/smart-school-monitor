@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#7BA3C9">
+  <meta name="format-detection" content="telephone=no">
+  <title>SharkQuick - Report Issue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #7BA3C9;
+      min-height: 100vh;
+      padding: 12px;
+      padding-top: max(12px, env(safe-area-inset-top));
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      background: #6B8FB8;
+      border-radius: 28px;
+      padding: 28px 20px 24px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #3D5A73;
+      letter-spacing: 3px;
+    }
+
+    .header p {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #C9524A;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    /* MAIN CARD */
+    .card {
+      background: #F5F0E6;
+      border-radius: 28px;
+      padding: 14px;
+    }
+
+    /* DEVICE INFO */
+    .device-info {
+      background: #6B8FB8;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .device-name {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #3D5A73;
+      line-height: 1;
+    }
+
+    .device-location {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #C9524A;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    .device-model {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4A6A82;
+      margin-top: 2px;
+    }
+
+    .device-id {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #5B8AAA;
+      margin-top: 10px;
+      line-height: 1;
+    }
+
+    /* EMPLOYEE SECTION */
+    .employee-section {
+      background: #6B8FB8;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .employee-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #E8E4DC;
+      text-align: center;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+
+    .employee-input {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px; /* Prevents iOS zoom on focus */
+      font-family: inherit;
+      font-weight: 600;
+      text-align: center;
+      background: #fff;
+      color: #3D5A73;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .employee-input.valid {
+      background: #E8F5E9;
+    }
+
+    .employee-status {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #E8E4DC;
+      min-height: 36px;
+    }
+
+    .employee-status .found {
+      color: #81C784;
+    }
+
+    .employee-status .checkmark {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background: #4CAF50;
+      border-radius: 50%;
+      position: relative;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .employee-status .checkmark::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 3px;
+      width: 4px;
+      height: 7px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* BUTTONS GRID */
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .issue-btn {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 10px;
+      transition: transform 0.1s;
+      background: #5CB85C; /* Default fallback */
+    }
+
+    .issue-btn:active {
+      transform: scale(0.95);
+    }
+
+    .issue-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .issue-btn .icon-box {
+      width: 52px;
+      height: 52px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .issue-btn .icon-box svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .issue-btn .icon-box .emoji {
+      font-size: 28px;
+    }
+
+    .issue-btn .text {
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* VIBRANT BUTTON COLORS - EXACTLY LIKE THE MOCKUP */
+    .btn-green { background: #5CB85C; }
+    .btn-orange { background: #E8943A; }
+    .btn-red { background: #D9654C; }
+    .btn-yellow { background: #C4B240; }
+    .btn-blue { background: #4A7BA8; }
+    .btn-purple { background: #9B6BC4; }
+    .btn-pink { background: #E84D8A; }
+    .btn-teal { background: #26A69A; }
+    .btn-gray { background: #78909C; }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      background: #F5F0E6;
+      border-radius: 24px;
+      padding: 24px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .modal-icon {
+      width: 56px;
+      height: 56px;
+      background: #4CAF50;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .modal-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+      stroke-width: 3;
+    }
+
+    .modal-icon.warning { background: #FFA726; }
+
+    .modal h2 {
+      color: #3D5A73;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: #6A8A9A;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+
+    .modal .email-box {
+      background: #6B8FB8;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal .email-box small {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.6rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .modal .email-box span {
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    .modal .hint {
+      color: #8A9AAA;
+      font-size: 0.7rem;
+      margin: 12px 0 8px;
+    }
+
+    .modal button {
+      background: #6B8FB8;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 36px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .after-hours {
+      background: #FFF8E1;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 10px 0;
+      text-align: left;
+      border: 1px solid #FFE082;
+    }
+
+    .after-hours strong {
+      color: #E65100;
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .after-hours p {
+      color: #BF360C;
+      font-size: 0.7rem;
+      margin: 0;
+    }
+
+    .after-hours a {
+      color: #1565C0;
+      font-weight: 600;
+    }
+
+    /* LOADING & ERROR */
+    .loading, .error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      color: white;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error { display: none; }
+    .main { display: none; }
+    .main.show { display: block; }
+
+    /* RESPONSIVE */
+    @media (max-width: 360px) {
+      .device-name { font-size: 2rem; }
+      .device-id { font-size: 2.2rem; }
+      .issue-btn .icon-box { width: 44px; height: 44px; }
+      .issue-btn .text { font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading -->
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p style="margin-top:16px">Loading...</p>
+  </div>
+
+  <!-- Error -->
+  <div id="error" class="error">
+    <p style="font-size:1.2rem;font-weight:700;margin-bottom:8px">Device Not Found</p>
+    <p id="error-msg">Please scan a valid QR code.</p>
+  </div>
+
+  <!-- Main -->
+  <div id="main" class="main">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>SHARKQUICK</h1>
+        <p>SERVICE REQUEST PORTAL</p>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <!-- Device Info -->
+        <div class="device-info">
+          <div class="device-name" id="device-name">DEVICE</div>
+          <div class="device-location" id="device-location">LOCATION</div>
+          <div class="device-model" id="device-model">MODEL</div>
+          <div class="device-id" id="device-id">ID</div>
+        </div>
+
+        <!-- Employee -->
+        <div class="employee-section">
+          <div class="employee-label">FIND EMPLOYEE (REQUIRED)</div>
+          <input type="text" id="emp-input" class="employee-input" placeholder="Enter ID or Name..." autocomplete="off">
+          <div id="emp-status" class="employee-status"></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons-grid" id="buttons-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon" id="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 id="modal-title">Request Submitted!</h2>
+      <p id="modal-msg">A confirmation email will be sent to:</p>
+      <div class="email-box">
+        <small>EMAIL ADDRESS</small>
+        <span id="modal-email">email@example.com</span>
+      </div>
+      <div id="after-hours" class="after-hours" style="display:none">
+        <strong>After-Hours Notice</strong>
+        <p id="after-hours-msg">Your request will be addressed during the next working hours.</p>
+        <p style="margin-top:8px"><strong>For urgent issues:</strong></p>
+        <p id="urgent-contact"></p>
+      </div>
+      <p class="hint">To submit another request, enter your Employee ID and select an issue.</p>
+      <button onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script src="/js/api-shim.js"></script>
+  <script>
+    // Get deviceId from URL parameters
+    var deviceId = new URLSearchParams(window.location.search).get('device') || '';
+    var pageData = null;
+    var employee = null;
+    var workingHours = null;
+    var timeout = null;
+    var dataLoaded = false;
+
+    // Fallback colors if button doesn't have a color set
+    var fallbackColors = ['#5CB85C', '#D9654C', '#C4B240', '#4A7BA8', '#9B6BC4', '#E84D8A', '#26A69A', '#78909C'];
+
+    // Extended icon library - Lucide-style SVG icons
+    var icons = {
+      // Basic
+      'circle': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
+      'check': '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+      'x': '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      'plus': '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+      'minus': '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+
+      // Printer/Copier related
+      'printer': '<svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
+      'droplet': '<svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
+      'droplets': '<svg viewBox="0 0 24 24"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 14.69c1.47 0 2.67-1.23 2.67-2.73 0-.78-.38-1.52-1.14-2.14s-1.4-1.57-1.53-2.52c-.2.97-.76 1.9-1.53 2.52s-1.14 1.36-1.14 2.14c0 1.5 1.2 2.73 2.67 2.73z"/><path d="M17 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S17.29 6.75 17 5.3c-.29 1.45-1.14 2.84-2.29 3.76S13 11.1 13 12.25c0 2.22 1.8 4.05 4 4.05z"/></svg>',
+      'file': '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+      'file-text': '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+      'files': '<svg viewBox="0 0 24 24"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1V6.5L15.5 2z"/><path d="M3 7.6v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8"/><path d="M15 2v5h5"/></svg>',
+      'copy': '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+      'paperclip': '<svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>',
+
+      // Alerts & Status
+      'alert-triangle': '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      'alert-circle': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      'alert-octagon': '<svg viewBox="0 0 24 24"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      'info': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      'help-circle': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      'bell': '<svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+
+      // Tools & Settings
+      'settings': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+      'wrench': '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+      'tool': '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+      'hammer': '<svg viewBox="0 0 24 24"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg>',
+      'cog': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+
+      // Power & Network
+      'power': '<svg viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>',
+      'power-off': '<svg viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>',
+      'plug': '<svg viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6v0a6 6 0 0 1-6-6V8Z"/></svg>',
+      'zap': '<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+      'zap-off': '<svg viewBox="0 0 24 24"><polyline points="12.41 6.75 13 2 10.57 4.92"/><polyline points="18.57 12.91 21 10 15.66 10"/><polyline points="8 8 3 14 12 14 11 22 16 16"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+      'wifi': '<svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>',
+      'wifi-off': '<svg viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>',
+
+      // Hardware
+      'cpu': '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+      'hard-drive': '<svg viewBox="0 0 24 24"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>',
+      'monitor': '<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+      'laptop': '<svg viewBox="0 0 24 24"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0l1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/></svg>',
+      'smartphone': '<svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+      'tablet': '<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+      'mouse': '<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="6"/><line x1="12" y1="7" x2="12" y2="11"/></svg>',
+      'keyboard': '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="8" y1="12" x2="8.01" y2="12"/><line x1="12" y1="12" x2="12.01" y2="12"/><line x1="16" y1="12" x2="16.01" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg>',
+
+      // Misc
+      'trash': '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+      'trash-2': '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
+      'refresh-cw': '<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
+      'rotate-cw': '<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
+      'clock': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      'calendar': '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+      'phone': '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+      'mail': '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+      'message-circle': '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+      'send': '<svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+      'user': '<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      'users': '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      'home': '<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      'image': '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+      'camera': '<svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+      'eye': '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      'eye-off': '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+      'lock': '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+      'unlock': '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>',
+      'key': '<svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
+      'shield': '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      'search': '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+      'star': '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      'heart': '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      'thumbs-up': '<svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>',
+      'thumbs-down': '<svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>',
+      'flag': '<svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>',
+      'bookmark': '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+      'tag': '<svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
+      'box': '<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+      'package': '<svg viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+      'archive': '<svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+      'folder': '<svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+      'download': '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+      'upload': '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+      'link': '<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+      'external-link': '<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+      'log-in': '<svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>',
+      'log-out': '<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+      'arrows': '<svg viewBox="0 0 24 24"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>',
+      'chevron-up': '<svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>',
+      'chevron-down': '<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>',
+      'chevron-left': '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>',
+      'chevron-right': '<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>',
+      'arrow-up': '<svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+      'arrow-down': '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+      'arrow-left': '<svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+      'arrow-right': '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+      'more-horizontal': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
+      'more-vertical': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>',
+      'menu': '<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+      'grid': '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+      'list': '<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+
+      // Additional icons for issue buttons
+      'hand': '<svg viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>',
+      'monitor-x': '<svg viewBox="0 0 24 24"><path d="M14.5 7.5 9.5 12.5"/><path d="M9.5 7.5 14.5 12.5"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>',
+      'activity': '<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+      'code': '<svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+      'credit-card': '<svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+      'terminal': '<svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>',
+      'server': '<svg viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>',
+      'database': '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>',
+      'cloud': '<svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>',
+      'cloud-off': '<svg viewBox="0 0 24 24"><path d="m2 2 20 20"/><path d="M5.78 5.77A7 7 0 0 0 9 19h8.5a4.5 4.5 0 0 0 1.87-8.61"/><path d="M15.71 9.71a7 7 0 0 0-7.93-2.94"/></svg>',
+      'usb': '<svg viewBox="0 0 24 24"><circle cx="10" cy="7" r="1"/><circle cx="4" cy="20" r="1"/><path d="M4.7 19.3 19 5"/><path d="m21 3-3 1 2 2Z"/><path d="M9.26 7.68 5 12l2 5"/><path d="m10 14 5 2 3.5-3.5"/><path d="m18 12 1-1 1 1-1 1Z"/></svg>',
+      'bluetooth': '<svg viewBox="0 0 24 24"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg>',
+      'bluetooth-off': '<svg viewBox="0 0 24 24"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg>',
+      'volume-x': '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>',
+      'volume-2': '<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+      'battery': '<svg viewBox="0 0 24 24"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/></svg>',
+      'battery-low': '<svg viewBox="0 0 24 24"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="6" y2="13"/></svg>',
+      'thermometer': '<svg viewBox="0 0 24 24"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>',
+      'sun': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+      'moon': '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>'
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setupInput();
+      checkHours();
+
+      // If template gave us a valid deviceId, load immediately
+      if (deviceId && deviceId !== 'undefined' && deviceId !== '') {
+        loadData();
+      } else {
+        // Fallback: try getting from URL params (qr param)
+        var qr = new URLSearchParams(window.location.search).get('qr');
+        if (qr) {
+          deviceId = qr;
+          loadData();
+        } else {
+          showError('No device specified in QR code URL.');
+        }
+      }
+    });
+
+    function checkHours() {
+      google.script.run
+        .withSuccessHandler(function(r) {
+          try { workingHours = JSON.parse(r); } catch(e) { workingHours = {isWorkingHours:true}; }
+        })
+        .withFailureHandler(function() { workingHours = {isWorkingHours:true}; })
+        .getWorkingHoursStatus();
+    }
+
+    function loadData() {
+      if (dataLoaded) return;
+      dataLoaded = true;
+      if (!deviceId || deviceId === 'undefined') { showError('No device specified in QR code URL.'); return; }
+
+      var t = setTimeout(function() { showError('Loading timed out. Device ID: ' + deviceId); }, 15000);
+
+      google.script.run
+        .withSuccessHandler(function(r) {
+          clearTimeout(t);
+          if (r && r.success) { pageData = r; render(); }
+          else { showError((r && r.error || 'Device not found') + ' (ID: ' + deviceId + ')'); }
+        })
+        .withFailureHandler(function(err) { clearTimeout(t); showError('Failed to load: ' + (err && err.message || 'Unknown error') + ' (ID: ' + deviceId + ')'); })
+        .getRequestPageData(deviceId);
+    }
+
+    function showError(msg) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'flex';
+      document.getElementById('error-msg').textContent = msg;
+    }
+
+    function render() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('main').classList.add('show');
+
+      var d = pageData.device;
+      document.getElementById('device-name').textContent = d.name || 'UNKNOWN';
+      document.getElementById('device-location').textContent = d.location || d.building || '';
+      document.getElementById('device-model').textContent = d.model || d.type || '';
+      document.getElementById('device-id').textContent = d.id || '';
+
+      renderButtons();
+    }
+
+    function getIcon(icon) {
+      if (!icon) return icons['circle'];
+      // Handle emoji prefix format
+      if (icon.startsWith('emoji:')) return '<span class="emoji">' + icon.substring(6) + '</span>';
+      // Handle raw emoji characters
+      var emojiRx = /^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}]/u;
+      if (emojiRx.test(icon)) return '<span class="emoji">' + icon + '</span>';
+      // Handle lucide icon names
+      var iconKey = icon.toLowerCase();
+      if (icons[iconKey]) return icons[iconKey];
+      // Also try without hyphens just in case
+      var iconKeyNoHyphen = icon.toLowerCase().replace(/-/g, '');
+      for (var key in icons) {
+        if (key.replace(/-/g, '') === iconKeyNoHyphen) return icons[key];
+      }
+      // Default fallback
+      return icons['circle'];
+    }
+
+    function renderButtons() {
+      var grid = document.getElementById('buttons-grid');
+      var btns = pageData.buttons || [];
+
+      if (!btns.length) {
+        grid.innerHTML = '<p style="grid-column:span 2;text-align:center;color:#6A8A9A;padding:20px">No issues configured.</p>';
+        return;
+      }
+
+      grid.innerHTML = btns.map(function(b, i) {
+        // Use button's own color, or fallback to cycling colors
+        var bgColor = b.color || fallbackColors[i % fallbackColors.length];
+        var styleAttr = 'background: ' + bgColor + ';';
+        return '<button class="issue-btn" style="' + styleAttr + '" data-id="' + b.id + '" data-label="' + b.label + '" onclick="submit(this)" disabled>' +
+          '<div class="icon-box">' + getIcon(b.icon) + '</div>' +
+          '<div class="text">' + b.label + '</div>' +
+        '</button>';
+      }).join('');
+    }
+
+    function setupInput() {
+      var input = document.getElementById('emp-input');
+      input.addEventListener('input', function() {
+        clearTimeout(timeout);
+        var val = this.value.trim();
+        if (val.length >= 2) {
+          document.getElementById('emp-status').innerHTML = 'Searching...';
+          timeout = setTimeout(function() { lookup(val); }, 400);
+        } else {
+          document.getElementById('emp-status').innerHTML = '';
+          employee = null;
+          updateBtns();
+          input.classList.remove('valid');
+        }
+      });
+    }
+
+    function lookup(id) {
+      google.script.run
+        .withSuccessHandler(function(r) {
+          if (r.success) {
+            employee = r.employee;
+            document.getElementById('emp-status').innerHTML = '<span class="found"><span class="checkmark"></span> ' + employee.name + '<br><small>(' + employee.email + ')</small></span>';
+            document.getElementById('emp-input').classList.add('valid');
+          } else {
+            document.getElementById('emp-status').innerHTML = '<span style="color:#FFCDD2">Employee not found</span>';
+            employee = null;
+            document.getElementById('emp-input').classList.remove('valid');
+          }
+          updateBtns();
+        })
+        .withFailureHandler(function() {
+          document.getElementById('emp-status').innerHTML = '';
+          employee = null;
+          updateBtns();
+        })
+        .lookupEmployee(id);
+    }
+
+    function updateBtns() {
+      document.querySelectorAll('.issue-btn').forEach(function(b) { b.disabled = !employee; });
+    }
+
+    function submit(btn) {
+      if (!employee) { alert('Enter Employee ID first'); return; }
+      document.querySelectorAll('.issue-btn').forEach(function(b) { b.disabled = true; });
+
+      google.script.run
+        .withSuccessHandler(function(r) {
+          if (r.success) { showModal(); }
+          else { alert('Error: ' + (r.error || 'Failed')); updateBtns(); }
+        })
+        .withFailureHandler(function() { alert('Failed. Try again.'); updateBtns(); })
+        .createServiceRequest({
+          deviceId: deviceId,
+          employeeId: employee.empId,
+          employeeName: employee.name,
+          employeeEmail: employee.email,
+          issueType: btn.dataset.id,
+          issueLabel: btn.dataset.label,
+          notes: ''
+        });
+    }
+
+    function showModal() {
+      document.getElementById('modal-email').textContent = employee.email;
+      var ah = document.getElementById('after-hours');
+      var icon = document.getElementById('modal-icon');
+
+      if (workingHours && !workingHours.isWorkingHours && workingHours.settings) {
+        ah.style.display = 'block';
+        icon.classList.add('warning');
+        document.getElementById('after-hours-msg').textContent = workingHours.settings.afterHoursMessage || 'Your request will be addressed during the next working hours.';
+        var email = workingHours.settings.urgentEmail || 'support@school.org';
+        var phone = workingHours.settings.urgentPhone || '(555) 123-4567';
+        document.getElementById('urgent-contact').innerHTML = '<a href="mailto:' + email + '">' + email + '</a> | <a href="tel:' + phone.replace(/\D/g,'') + '">' + phone + '</a>';
+      } else {
+        ah.style.display = 'none';
+        icon.classList.remove('warning');
+      }
+
+      document.getElementById('modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('show');
+      document.getElementById('after-hours').style.display = 'none';
+      document.getElementById('modal-icon').classList.remove('warning');
+      document.getElementById('emp-input').value = '';
+      document.getElementById('emp-input').classList.remove('valid');
+      document.getElementById('emp-status').innerHTML = '';
+      employee = null;
+      updateBtns();
+      checkHours();
+    }
+  </script>
+</body>
+</html>
